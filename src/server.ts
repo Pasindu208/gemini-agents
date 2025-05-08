@@ -24,6 +24,15 @@ try {
 const bot = createBot(config);
 
 app.post('/chat', async (req, res) => {
+  // simple auth: require ADMIN_PASSWORD in x-admin-password header
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminPassword) {
+    return res.status(500).json({ error: 'Server misconfiguration' });
+  }
+  const passwordAttempt = req.headers['x-admin-password'];
+  if (passwordAttempt !== adminPassword) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
   const { message } = req.body;
   if (!message) return res.status(400).json({ error: 'No message provided' });
   try {

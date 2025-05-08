@@ -1,6 +1,8 @@
 import { parseArgs } from "node:util";
 import { createInterface } from "node:readline/promises";
-import { stdin as input, stdout as output } from "node:process";
+import { stdin as input, stdout as output, env } from "node:process";
+import dotenv from 'dotenv';
+dotenv.config();
 
 import { getConfig, parseConfig, Config } from "./config.js";
 import { usage } from "./docs.js";
@@ -30,6 +32,20 @@ export async function main(args: string[]) {
   const bot = createBot(config);
 
   const readline = createInterface({ input, output });
+
+  // simple login check
+  const adminPassword = env.ADMIN_PASSWORD;
+  if (!adminPassword) {
+    console.error("Missing ADMIN_PASSWORD environment variable");
+    readline.close();
+    return;
+  }
+  const passwordAttempt = await readline.question("Enter password: ");
+  if (passwordAttempt !== adminPassword) {
+    console.error("Invalid password");
+    readline.close();
+    return;
+  }
 
   let userInput = await readline.question(`${welcomeMessage}\n\n> `);
 
