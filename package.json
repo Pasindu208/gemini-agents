@@ -20,6 +20,7 @@
     "format:check": "prettier --check ./src",
     "lint": "eslint ./src",
     "start": "node --no-deprecation dist/index.js",
+    "serve": "tsx --no-deprecation src/server.ts",
     "dev": "tsx --no-deprecation --env-file=.env --watch ./bin/agent.ts"
   },
   "devDependencies": {
@@ -33,6 +34,9 @@
     "typescript-eslint": "^8.24.1"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.24.0"
+    "@google/generative-ai": "^0.24.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0"
   }
 }
